@@ -1,5 +1,5 @@
 <html>
 <body>
-<h2>Welcome to File Storage Service</h2>
+<h2>Welcome to Kyne's Wei Xin Platform service</h2>
 </body>
 </html>
