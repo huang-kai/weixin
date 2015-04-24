@@ -14,6 +14,7 @@ public class MessageHandler {
             }
             break;
         case "text":
+        	result = handleTestRequests(msg);
             result = TulingApiHandler.getTulingResult(msg.getContent());
             System.out.println(result);
             break;
@@ -24,5 +25,19 @@ public class MessageHandler {
         
         return result;
     }
+
+	private String handleTestRequests(IncomingMessage msg) {
+		if ("帮助".equals(msg.getContent())){
+			return genHelp();
+		}
+		return null;
+	}
+	
+	private String genHelp(){
+		StringBuffer sb = new StringBuffer();
+		sb.append("欢迎使用Kyne的平台，您可以随时找小轩轩聊天。\\\n");
+		sb.append("您也可以输入 ‘轩轩的照片’");
+		return sb.toString();
+	}
 
 }
