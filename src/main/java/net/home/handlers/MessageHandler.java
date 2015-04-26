@@ -1,5 +1,9 @@
 package net.home.handlers;
 
+import java.io.IOException;
+
+import org.apache.commons.io.IOUtils;
+
 import net.home.pojo.IncomingMessage;
 
 public class MessageHandler {
@@ -14,7 +18,7 @@ public class MessageHandler {
             }
             break;
         case "text":
-        	result = handleTestRequests(msg);
+        	result = handleTextRequests(msg);
             result = TulingApiHandler.getTulingResult(msg.getContent());
             System.out.println(result);
             break;
@@ -26,7 +30,7 @@ public class MessageHandler {
         return result;
     }
 
-	private String handleTestRequests(IncomingMessage msg) {
+	private String handleTextRequests(IncomingMessage msg) {
 		if ("帮助".equals(msg.getContent())){
 			return genHelp();
 		}
@@ -34,10 +38,14 @@ public class MessageHandler {
 	}
 	
 	private String genHelp(){
-		StringBuffer sb = new StringBuffer();
-		sb.append("欢迎使用Kyne的平台，您可以随时找小轩轩聊天。\\\n");
-		sb.append("您也可以输入 ‘轩轩的照片’");
-		return sb.toString();
+	    String result = "";
+	    try {
+            result = IOUtils.toString(getClass().getResourceAsStream("help.txt"));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+	    return result;
 	}
 
 }
