@@ -13,7 +13,6 @@ import net.home.handlers.TulingApiHandler;
 import net.home.pojo.IncomingMessage;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.http.impl.conn.InMemoryDnsResolver;
 
 import com.thoughtworks.xstream.XStream;
 
