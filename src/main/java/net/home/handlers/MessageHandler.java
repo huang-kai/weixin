@@ -31,8 +31,14 @@ public class MessageHandler {
     }
 
 	private String handleTextRequests(IncomingMessage msg) {
-		if ("帮助".equals(msg.getContent())){
+	    String content = msg.getContent();
+		if ("帮助".equals(content)){
 			return genHelp();
+		}else if(content.startsWith("$")){
+		    JournalHandler journalHandler = new JournalHandler();
+		    return journalHandler.handleInComingMsg(msg);
+		}else if (content.startsWith("%")){
+		    
 		}
 		return null;
 	}
