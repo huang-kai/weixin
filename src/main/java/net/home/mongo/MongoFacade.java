@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import net.home.pojo.Budget;
 import net.home.pojo.Recipe;
 
+import org.apache.commons.lang.StringUtils;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Key;
 import org.mongodb.morphia.Morphia;
@@ -88,7 +89,7 @@ public class MongoFacade {
     }
 
     
-    public BigDecimal calculateSum(String userId, int year, int month, int day, Recipe.TYPE type) {
+    public BigDecimal calculateSumByDate(String userId, int year, int month, int day, Recipe.TYPE type) {
         
         Query<Recipe> query = ds.createQuery(Recipe.class).filter("user_id =", userId).filter("year =", year).filter("type =", String.valueOf(type));
         if (month != 0){
@@ -105,6 +106,19 @@ public class MongoFacade {
         return sum;
     }
 
+    public BigDecimal calculateSumByLevel(String userId, String level1, String level2) {
+        
+        Query<Recipe> query = ds.createQuery(Recipe.class).filter("user_id =", userId).filter("level1 =", level1);
+        if (!StringUtils.isBlank(level2)){
+            query = query.filter("level2 =", level2);
+        }
+        BigDecimal sum = BigDecimal.ZERO;
+        for (Recipe recipe : query) {
+            BigDecimal money = new BigDecimal(recipe.getSum());
+            sum = sum.add(money);
+        }
+        return sum;
+    }
    
 
     public BigDecimal getBudgetByUser(String userId) {

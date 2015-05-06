@@ -9,7 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.home.handlers.TulingApiHandler;
+import net.home.handlers.Handler;
+import net.home.handlers.MessageHandler;
 import net.home.pojo.IncomingMessage;
 
 import org.apache.commons.io.IOUtils;
@@ -49,7 +50,8 @@ public class AuthServlet extends HttpServlet{
             xstream.processAnnotations(IncomingMessage.class);
             IncomingMessage inMsg = (IncomingMessage)xstream.fromXML(msg);
             System.out.println("Object Message: " + inMsg);
-            String result = TulingApiHandler.getTulingResult(inMsg.getContent());
+            Handler handler = new MessageHandler();
+            String result = handler.handleMsg(inMsg);
             System.out.println(result);
             
             resp.setStatus(HttpServletResponse.SC_OK);

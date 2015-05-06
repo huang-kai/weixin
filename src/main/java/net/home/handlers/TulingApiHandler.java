@@ -4,19 +4,21 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.home.pojo.IncomingMessage;
 import net.home.util.HttpClientHelper;
 
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class TulingApiHandler {
+public class TulingApiHandler implements Handler{
+    
     /** 
      * 调用图灵机器人api接口，获取智能回复内容，解析获取自己所需结果 
      * @param content 
      * @return 
      */  
-    public static String getTulingResult(String content){  
+    public String getTulingResult(String content){  
         /** 此处为图灵api接口，参数key需要自己去注册申请，先以11111111代替 */  
         String apiUrl = "http://www.tuling123.com/openapi/api";  
         Map<String, String> param = new HashMap<String, String>();  
@@ -65,5 +67,11 @@ public class TulingApiHandler {
             e.printStackTrace();  
         }  
         return result;  
+    }
+
+    @Override
+    public String handleMsg(IncomingMessage msg) {
+        String content = msg.getContent();
+        return getTulingResult(content);
     }  
 }
