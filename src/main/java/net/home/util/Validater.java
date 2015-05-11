@@ -18,7 +18,7 @@ public class Validater {
     }
 
     public static void validateMoney(String input) throws GeneralException {
-        String datePattern = "\\$[\\+-](([1-9]{1}\\d*)|([0]{1}))(\\.(\\d){1,2})?$";
+        String datePattern = "[\\+-](([1-9]{1}\\d*)|([0]{1}))(\\.(\\d){1,2})?$";
         if (!input.matches(datePattern)) {
             throw new GeneralException(ErrCode.MONEY_FORMAT_ERROR, input);
         }

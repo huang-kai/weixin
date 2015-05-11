@@ -5,6 +5,7 @@ import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 import org.mongodb.morphia.annotations.Indexed;
+import org.mongodb.morphia.annotations.Property;
 
 @Entity(value="budget", noClassnameStored=true)
 public class Budget {
@@ -13,6 +14,7 @@ public class Budget {
     private ObjectId id;
     
     @Indexed
+    @Property("user_id")
     private String userId;
     
     private double budget;

@@ -22,22 +22,32 @@ public class MessageHandler implements Handler{
                 break;
             case "text":
                 result = handleTextRequests(msg);
-                System.out.println(result);
+                break;
+            case "image":
+                result = handleImageRequests(msg);
                 break;
             default:
                 break;
             }
         } catch (GeneralException ex) {
             result = ex.getErrMsg();
+        } catch (Exception e){
+            e.printStackTrace();
+            result = "系统错误！请联系管理员";
         }
 
         return result;
     }
 
+    private String handleImageRequests(IncomingMessage msg) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
     private String handleTextRequests(IncomingMessage msg) throws GeneralException{
         Handler handler;
         String content = msg.getContent();
-        if ("帮助".equals(content)) {
+        if ("帮助".equals(content)||"help".equals(content)) {
             return genHelp();
         } else if (content.startsWith("$")) {
             handler = new JournalHandler();
@@ -50,14 +60,20 @@ public class MessageHandler implements Handler{
     }
 
     private String genHelp() {
-        String result = "";
+        StringBuffer result = new StringBuffer();
         try {
-            result = IOUtils.toString(getClass().getResourceAsStream("help.txt"), "utf-8");
+            result.append(IOUtils.toString(getClass().getResourceAsStream("mainHelp.txt"), "utf-8"));
+            result.append("\n");
+            result.append("\n");
+            result.append(IOUtils.toString(getClass().getResourceAsStream("journalHelp.txt"), "utf-8"));
+            result.append("\n");
+            result.append("\n");
+            result.append(IOUtils.toString(getClass().getResourceAsStream("statisticHelp.txt"), "utf-8"));
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        return result;
+        return result.toString();
     }
 
 }

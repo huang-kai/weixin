@@ -1,6 +1,7 @@
 package net.home.mongo;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import net.home.pojo.Budget;
 import net.home.pojo.Recipe;
@@ -44,6 +45,7 @@ public class MongoFacade {
                 .threadsAllowedToBlockForConnectionMultiplier(DEFAULT_BLOCKING_CONNECTION_MULTIPLIER)
                 .maxWaitTime(DEFAULT_THREAD_WAIT_MS).socketKeepAlive(true).build();
         mongo = new MongoClient(address, options);
+//        mongo = new MongoClient(address);
         morphia = new Morphia();
         morphia.map(Recipe.class).map(Budget.class);
         ds = morphia.createDatastore(mongo, "journal");
@@ -53,7 +55,7 @@ public class MongoFacade {
 
     public static synchronized MongoFacade getInstance() {
         if (instance == null) {
-            instance = new MongoFacade("10.100.1.136");
+            instance = new MongoFacade("10.100.1.123");
         }
         return instance;
     }
@@ -88,14 +90,13 @@ public class MongoFacade {
         return ((Long) key.getId()).longValue();
     }
 
-    
-    public BigDecimal calculateSumByDate(String userId, int year, int month, int day, Recipe.TYPE type) {
-        
-        Query<Recipe> query = ds.createQuery(Recipe.class).filter("user_id =", userId).filter("year =", year).filter("type =", String.valueOf(type));
-        if (month != 0){
+    public BigDecimal calculateSumByDate(String userId, int year, int month, int day) {
+
+        Query<Recipe> query = ds.createQuery(Recipe.class).filter("user_id =", userId).filter("year =", year);
+        if (month != 0) {
             query = query.filter("month =", month);
         }
-        if (day !=0){
+        if (day != 0) {
             query = query.filter("day =", day);
         }
         BigDecimal sum = BigDecimal.ZERO;
@@ -106,11 +107,15 @@ public class MongoFacade {
         return sum;
     }
 
-    public BigDecimal calculateSumByLevel(String userId, String level1, String level2) {
-        
-        Query<Recipe> query = ds.createQuery(Recipe.class).filter("user_id =", userId).filter("level1 =", level1);
-        if (!StringUtils.isBlank(level2)){
-            query = query.filter("level2 =", level2);
+    public BigDecimal calculateSumByType(String userId, int year, int month, int day, Recipe.TYPE type) {
+
+        Query<Recipe> query = ds.createQuery(Recipe.class).filter("user_id =", userId).filter("year =", year)
+                .filter("type =", String.valueOf(type));
+        if (month != 0) {
+            query = query.filter("month =", month);
+        }
+        if (day != 0) {
+            query = query.filter("day =", day);
         }
         BigDecimal sum = BigDecimal.ZERO;
         for (Recipe recipe : query) {
@@ -119,12 +124,35 @@ public class MongoFacade {
         }
         return sum;
     }
-   
+
+    public BigDecimal calculateSumByLevel(String userId, int year, int month, int day, String level1, String level2) {
+
+        Query<Recipe> query = ds.createQuery(Recipe.class).filter("user_id =", userId).filter("level1 =", level1);
+        if (!StringUtils.isBlank(level2)) {
+            query = query.filter("level2 =", level2);
+        }
+        if (year != 0) {
+            query = query.filter("year =", year);
+        }
+        if (month != 0) {
+            query = query.filter("month =", month);
+        }
+        if (day != 0) {
+            query = query.filter("day =", day);
+        }
+        query = query.order("year, month, day");
+        BigDecimal sum = BigDecimal.ZERO;
+        for (Recipe recipe : query) {
+            BigDecimal money = new BigDecimal(recipe.getSum());
+            sum = sum.add(money);
+        }
+        return sum;
+    }
 
     public BigDecimal getBudgetByUser(String userId) {
         Query<Budget> query = ds.createQuery(Budget.class).field("user_id").equal(userId);
         Budget budget = query.get();
-        if (budget != null) {
+        if (budget != null && budget.getBudget()>0) {
             return new BigDecimal(budget.getBudget());
         } else {
             return null;
@@ -134,6 +162,27 @@ public class MongoFacade {
     public void setBudget(Budget budget) {
         Query<Budget> query = ds.createQuery(Budget.class).field("user_id").equal(budget.getUserId());
         ds.updateFirst(query, budget, true);
+    }
+    
+
+    public Recipe queryRecipeById(long id) {
+        Query<Recipe> query = ds.createQuery(Recipe.class).field("myLongId").equal(id);
+        return query.get();
+    }
+
+    public List<Recipe> queryRecipeByDate(String userId, int year, int month, int day) {
+        Query<Recipe> query = ds.createQuery(Recipe.class).filter("user_id =", userId);
+        if (year != 0) {
+            query = query.filter("year =", year);
+        }
+        if (month != 0) {
+            query = query.filter("month =", month);
+        }
+        if (day != 0) {
+            query = query.filter("day =", day);
+        }
+        query = query.order("year, month, day");
+        return query.asList();
     }
 
 }

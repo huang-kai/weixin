@@ -54,7 +54,8 @@ public class IncomingMessage {
     
     private String format;
     
-    private String recognition;
+    @XStreamAlias("Recongnition")
+    private String recongnition;
     
 
     public String getEvent() {
@@ -169,12 +170,12 @@ public class IncomingMessage {
         this.format = format;
     }
 
-    public String getRecognition() {
-        return recognition;
+    public String getRecongnition() {
+        return recongnition;
     }
 
-    public void setRecognition(String recognition) {
-        this.recognition = recognition;
+    public void setRecongnition(String recongnition) {
+        this.recongnition = recongnition;
     }
 
     public String getToUserName() {
@@ -241,7 +242,7 @@ public class IncomingMessage {
                 + ", longitude=" + longitude + ", precision=" + precision + ", picUrl=" + picUrl + ", mediaId="
                 + mediaId + ", title=" + title + ", description=" + description + ", location_X=" + location_X
                 + ", location_Y=" + location_Y + ", label=" + label + ", format=" + format + ", recognition="
-                + recognition + "]";
+                + recongnition + "]";
     }
     
 }
