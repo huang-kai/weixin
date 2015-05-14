@@ -55,7 +55,7 @@ public class MongoFacade {
 
     public static synchronized MongoFacade getInstance() {
         if (instance == null) {
-            instance = new MongoFacade("10.100.1.123");
+            instance = new MongoFacade("localhost");
         }
         return instance;
     }
