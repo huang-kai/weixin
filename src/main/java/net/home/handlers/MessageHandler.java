@@ -2,16 +2,20 @@ package net.home.handlers;
 
 import java.io.IOException;
 
-import org.apache.commons.io.IOUtils;
-
-import net.home.exception.ErrCode;
 import net.home.exception.GeneralException;
 import net.home.pojo.IncomingMessage;
 
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class MessageHandler implements Handler{
 
+    private static final Logger logger = LoggerFactory.getLogger(MessageHandler.class.getName());
+    
+    @Override
     public String handleMsg(IncomingMessage msg) {
-        System.out.println("Object Message: " + msg);
+        logger.debug("Object Message: " + msg);
         String result = " ";
         try {
             switch (msg.getMsgType()) {
@@ -32,7 +36,7 @@ public class MessageHandler implements Handler{
         } catch (GeneralException ex) {
             result = ex.getErrMsg();
         } catch (Exception e){
-            e.printStackTrace();
+            logger.error("Message handle error", e);
             result = "系统错误！请联系管理员";
         }
 
@@ -40,8 +44,8 @@ public class MessageHandler implements Handler{
     }
 
     private String handleImageRequests(IncomingMessage msg) {
-        // TODO Auto-generated method stub
-        return null;
+        FaceDetectHandler handler = new FaceDetectHandler();
+        return handler.handleMsg(msg);
     }
 
     private String handleTextRequests(IncomingMessage msg) throws GeneralException{
@@ -70,8 +74,7 @@ public class MessageHandler implements Handler{
             result.append("\n");
             result.append(IOUtils.toString(getClass().getResourceAsStream("statisticHelp.txt"), "utf-8"));
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error("Get Help error", e);
         }
         return result.toString();
     }

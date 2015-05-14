@@ -23,13 +23,16 @@ public class IncomingMessage {
     @XStreamAlias("MsgId")
     private String msgId;
     
-    @XStreamAlias("URL")
+    @XStreamAlias("Url")
     private String url;
     
+    @XStreamAlias("Event")
     private String event;
     
+    @XStreamAlias("EventKey")
     private String eventKey;
     
+    @XStreamAlias("Ticket")
     private String ticket;
     
     private String latitude;
@@ -38,24 +41,32 @@ public class IncomingMessage {
     
     private String precision;
     
+    @XStreamAlias("PicUrl")
     private String picUrl;
     
+    @XStreamAlias("MediaId")
     private String mediaId;
     
+    @XStreamAlias("Title")
     private String title;
     
+    @XStreamAlias("Description")
     private String description;
     
+    @XStreamAlias("Location_X")
     private String location_X;
     
+    @XStreamAlias("Location_Y")
     private String location_Y;
     
+    @XStreamAlias("Label")
     private String label;
     
+    @XStreamAlias("Format")
     private String format;
     
-    @XStreamAlias("Recongnition")
-    private String recongnition;
+    @XStreamAlias("Recognition")
+    private String recognition;
     
 
     public String getEvent() {
@@ -170,12 +181,12 @@ public class IncomingMessage {
         this.format = format;
     }
 
-    public String getRecongnition() {
-        return recongnition;
+    public String getRecognition() {
+        return recognition;
     }
 
-    public void setRecongnition(String recongnition) {
-        this.recongnition = recongnition;
+    public void setRecognition(String recognition) {
+        this.recognition = recognition;
     }
 
     public String getToUserName() {
@@ -242,7 +253,7 @@ public class IncomingMessage {
                 + ", longitude=" + longitude + ", precision=" + precision + ", picUrl=" + picUrl + ", mediaId="
                 + mediaId + ", title=" + title + ", description=" + description + ", location_X=" + location_X
                 + ", location_Y=" + location_Y + ", label=" + label + ", format=" + format + ", recognition="
-                + recongnition + "]";
+                + recognition + "]";
     }
     
 }

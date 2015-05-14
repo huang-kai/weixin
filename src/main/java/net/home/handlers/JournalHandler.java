@@ -15,8 +15,12 @@ import net.home.util.Validater;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class JournalHandler implements Handler{
+    
+    private static final Logger logger = LoggerFactory.getLogger(JournalHandler.class.getName());
 
     private MongoFacade mongoFacade = MongoFacade.getInstance();
 
@@ -117,8 +121,7 @@ public class JournalHandler implements Handler{
         try {
             result.append(IOUtils.toString(getClass().getResourceAsStream("journalHelp.txt"), "utf-8"));
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error("Get Help error",e);
         }
         return result.toString();
     }

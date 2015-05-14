@@ -1,0 +1,56 @@
+<configuration scan="true">
+  <property name="APP_NAME" value="WeiXin" />
+    <property name="MSG_CODE" value="wx0000" />
+  
+                  
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <layout class="ch.qos.logback.classic.PatternLayout">
+         <Pattern>[%date{ISO8601}][${APP_NAME}][%5level][${MSG_CODE}][%logger{0}] %msg%n</Pattern>
+    </layout>
+  </appender>
+                  
+  <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">  
+        <File>/var/log/${APP_NAME}.log</File>  
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>/var/log/${APP_NAME}.%d{yyyy-MM-dd}.%i.log</FileNamePattern>
+            <!-- keep 1 year's worth of history -->
+            <MaxHistory>365</MaxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                    <!-- or whenever the file size reaches 10MB -->
+                    <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+             <Pattern>[%date{ISO8601}][${APP_NAME}][%5level][${MSG_CODE}][%logger{0}] %msg%n</Pattern>
+        </layout>
+    </appender>  
+
+    <!-- Error level appender --> 
+    <appender name="ERROR_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">  
+        <File>/var/log/weixin_ERROR.log</File>  
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>/var/log/weixin_ERROR.%d{yyyy-MM-dd}.%i.log</FileNamePattern>
+            <!-- keep 1 year's worth of history -->
+            <MaxHistory>365</MaxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                    <!-- or whenever the file size reaches 10MB -->
+                    <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+        	 <Pattern>[%date{ISO8601}][${APP_NAME}][%5level][${MSG_CODE}][%logger{0}] %msg%n</Pattern>
+        </layout>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+           <level>ERROR</level>
+           <onMatch>ACCEPT</onMatch>
+           <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+    
+     
+  <root level="DEBUG">
+   <appender-ref ref="STDOUT" />
+    <appender-ref ref="FILE" />
+    <appender-ref ref="ERROR_APPENDER" />
+  </root>
+</configuration>

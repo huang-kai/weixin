@@ -15,11 +15,14 @@ import net.home.handlers.MessageHandler;
 import net.home.pojo.IncomingMessage;
 
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.thoughtworks.xstream.XStream;
 
 public class PlatformServlet extends HttpServlet {
-
+    private static final Logger logger = LoggerFactory.getLogger(PlatformServlet.class.getName());
+    
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
@@ -27,16 +30,15 @@ public class PlatformServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
-        System.out.println("signature: " + req.getParameter("signature"));
-        System.out.println("timestamp: " + req.getParameter("timestamp"));
-        System.out.println("nonce: " + req.getParameter("nonce"));
-        System.out.println("echostr:" + req.getParameter("echostr"));
+        logger.debug("signature: " + req.getParameter("signature"));
+        logger.debug("timestamp: " + req.getParameter("timestamp"));
+        logger.debug("nonce: " + req.getParameter("nonce"));
+        logger.debug("echostr:" + req.getParameter("echostr"));
         resp.setStatus(HttpServletResponse.SC_OK);
         try {
             resp.getWriter().println(req.getParameter("echostr"));
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error("error", e);
         }
     }
 
@@ -45,14 +47,14 @@ public class PlatformServlet extends HttpServlet {
         OutputStream out = null;
         try {
             String msg = IOUtils.toString(req.getInputStream(), "utf-8");
-            System.out.println(msg);
+            logger.debug(msg);
             XStream xstream = new XStream();
             xstream.processAnnotations(IncomingMessage.class);
             IncomingMessage inMsg = (IncomingMessage) xstream.fromXML(msg);
-            System.out.println("Object Message: " + inMsg);
+            logger.debug("Object Message: " + inMsg);
             Handler handler = new MessageHandler();
             String result = handler.handleMsg(inMsg);
-            System.out.println(result);
+            logger.debug(result);
 
             resp.setStatus(HttpServletResponse.SC_OK);
 
@@ -61,8 +63,7 @@ public class PlatformServlet extends HttpServlet {
             out.flush();
 
         } catch (IOException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
+            logger.error("Do post error", e1);
         } finally {
             try {
                 if (out != null) {
