@@ -1,5 +1,5 @@
 <configuration scan="true">
-  <property name="APP_NAME" value="WeiXin" />
+  <property name="APP_NAME" value="weixin" />
     <property name="MSG_CODE" value="wx0000" />
   
                   
@@ -10,9 +10,9 @@
   </appender>
                   
   <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">  
-        <File>/var/log/${APP_NAME}.log</File>  
+        <File>/var/log/${APP_NAME}/${APP_NAME}.log</File>  
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>/var/log/${APP_NAME}.%d{yyyy-MM-dd}.%i.log</FileNamePattern>
+            <FileNamePattern>/var/log/${APP_NAME}/${APP_NAME}.%d{yyyy-MM-dd}.%i.log</FileNamePattern>
             <!-- keep 1 year's worth of history -->
             <MaxHistory>365</MaxHistory>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
@@ -27,9 +27,9 @@
 
     <!-- Error level appender --> 
     <appender name="ERROR_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">  
-        <File>/var/log/weixin_ERROR.log</File>  
+        <File>/var/log/${APP_NAME}/weixin_ERROR.log</File>  
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>/var/log/weixin_ERROR.%d{yyyy-MM-dd}.%i.log</FileNamePattern>
+            <FileNamePattern>/var/log/${APP_NAME}/weixin_ERROR.%d{yyyy-MM-dd}.%i.log</FileNamePattern>
             <!-- keep 1 year's worth of history -->
             <MaxHistory>365</MaxHistory>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
