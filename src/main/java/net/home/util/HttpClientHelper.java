@@ -224,10 +224,10 @@ public class HttpClientHelper {
                 result = EntityUtils.toString(responseEntity, "UTF-8");
                 logger.debug("Response from POST {}, body : {}", url, result);
             } else if (statusCode == HttpStatus.SC_UNAUTHORIZED) {
-                logger.error("Failed : HTTP error code : {}, uri : {}", response.getStatusLine().getStatusCode(), url);
-                throw new IOException("Failed : HTTP error code : " + response.getStatusLine().getStatusCode());
+                logger.error("Failed : HTTP error code : {}, uri : {}", statusCode, url);
+                throw new IOException("Failed : HTTP error code : " + statusCode);
             } else {
-                logger.error("Failed : HTTP error code : {}, uri : {}", response.getStatusLine().getStatusCode(), url);
+                logger.error("Failed : HTTP error code : {}, uri : {}", statusCode, url);
                 String errorMsg = "Return code for http post is not 200. : Status code is -" + statusCode + " for url - " + url;
                 responseEntity = response.getEntity();
                 if (responseEntity != null) {
@@ -278,11 +278,11 @@ public class HttpClientHelper {
                 result = EntityUtils.toString(responseEntity, "UTF-8");
                 logger.debug("Response from get {}, body : {}", fullUri, result);
             } else if (statusCode == HttpStatus.SC_UNAUTHORIZED) {
-                logger.error("Failed : HTTP error code : {}, uri : {}", response.getStatusLine().getStatusCode(), fullUri);
-                throw new IOException("Failed : HTTP error code : " + response.getStatusLine().getStatusCode());
+                logger.error("Failed : HTTP error code : {}, uri : {}", statusCode, fullUri);
+                throw new IOException("Failed : HTTP error code : " + statusCode);
             } else {
-                logger.error("Failed : HTTP error code : {}, uri : {}", response.getStatusLine().getStatusCode(), fullUri);
-                throw new IOException("Failed : HTTP error code : " + response.getStatusLine().getStatusCode());
+                logger.error("Failed : HTTP error code : {}, uri : {}", statusCode, fullUri);
+                throw new IOException("Failed : HTTP error code : " + statusCode);
             }
         } catch (IOException ioe) {
             getRequest.abort();
@@ -320,11 +320,11 @@ public class HttpClientHelper {
                 responseEntity = response.getEntity();
                 return EntityUtils.toByteArray(responseEntity);
             } else if (statusCode == HttpStatus.SC_UNAUTHORIZED) {
-                logger.error("Failed : HTTP error code : {}, uri : {}", response.getStatusLine().getStatusCode(), fullUri);
-                throw new IOException("Failed : HTTP error code : " + response.getStatusLine().getStatusCode());
+                logger.error("Failed : HTTP error code : {}, uri : {}", statusCode, fullUri);
+                throw new IOException("Failed : HTTP error code : " + statusCode);
             } else {
-                logger.error("Failed : HTTP error code : {}, uri : {}", response.getStatusLine().getStatusCode(), fullUri);
-                throw new IOException("Failed : HTTP error code : " + response.getStatusLine().getStatusCode());
+                logger.error("Failed : HTTP error code : {}, uri : {}", statusCode, fullUri);
+                throw new IOException("Failed : HTTP error code : " + statusCode);
             }
         } catch (IOException ioe) {
             getRequest.abort();

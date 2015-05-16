@@ -7,6 +7,8 @@ import java.util.Map;
 import net.home.pojo.IncomingMessage;
 import net.home.util.HttpClientHelper;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +24,7 @@ public class FaceDetectHandler implements Handler{
     @Override
     public String handleMsg(IncomingMessage msg) {
         String url = msg.getPicUrl();
-        logger.debug("Picture url is: {0}", url);
+        logger.debug("Picture url is: {}", url);
         Map<String, String> param = new HashMap<String, String>();
         param.put("api_key", API_KEY);
         param.put("api_secret", API_SECRET);
@@ -31,25 +33,33 @@ public class FaceDetectHandler implements Handler{
         try {
             String result = httpClient.doGet(API_URL, param, null);
             JSONObject face = new JSONObject(result);
-            int age = face.getJSONArray("face").getJSONObject(0).getJSONObject("attribute").getJSONObject("age").getInt("value");
-            logger.debug("Your age: "+ age);
-            StringBuilder sb = new StringBuilder();
-            sb.append("您的年龄大约"+age+"岁");
-            sb.append("\n");
-            double smile = face.getJSONArray("face").getJSONObject(0).getJSONObject("attribute").getJSONObject("smiling").getDouble("value");
-            logger.debug("Your smile: "+smile);
-            if (smile<=10){
-                sb.append("看上去您今天心情不太好。");
-            }else if (smile<=50&&smile>10){
-                sb.append("笑一笑，10年少");
-            }else if (smile<=80 && smile>50){
-                sb.append("嗯！您今天心情不错！");
-            }else if (smile>80){
-                sb.append("笑得太厉害容易把牙笑掉了。");
+            JSONArray faces = face.getJSONArray("face");
+            if (faces!=null&&faces.length()>0){
+                int age = faces.getJSONObject(0).getJSONObject("attribute").getJSONObject("age").getInt("value");
+                logger.debug("Your age: "+ age);
+                StringBuilder sb = new StringBuilder();
+                sb.append("您的年龄大约"+age+"岁");
+                sb.append("\n");
+                double smile = faces.getJSONObject(0).getJSONObject("attribute").getJSONObject("smiling").getDouble("value");
+                logger.debug("Your smile: "+smile);
+                if (smile<=10){
+                    sb.append("看上去您今天心情不太好。");
+                }else if (smile<=50&&smile>10){
+                    sb.append("笑一笑，10年少");
+                }else if (smile<=80 && smile>50){
+                    sb.append("嗯！您今天心情不错！");
+                }else if (smile>80){
+                    sb.append("笑得太厉害容易把牙笑掉了。");
+                }
+                return sb.toString();
+            }else{
+                return "请不要拿石头开玩笑。";
             }
-            return sb.toString();
         } catch (IOException e) {
             logger.error("Detect Face error", e);
+        } catch (JSONException e){
+            logger.error("Detect Face error", e);
+            return "请不要拿石头开玩笑，请另选图片上传，图片最好清晰且角度合适，大小不要超过2M。";
         }
         return "error";
     }

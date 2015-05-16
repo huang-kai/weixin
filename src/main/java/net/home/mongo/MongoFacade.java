@@ -55,7 +55,7 @@ public class MongoFacade {
 
     public static synchronized MongoFacade getInstance() {
         if (instance == null) {
-            instance = new MongoFacade("localhost");
+            instance = new MongoFacade("ec2-52-68-220-240.ap-northeast-1.compute.amazonaws.com");
         }
         return instance;
     }
