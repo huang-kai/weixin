@@ -73,6 +73,9 @@ public class MessageHandler implements Handler{
             result.append("\n");
             result.append("\n");
             result.append(IOUtils.toString(getClass().getResourceAsStream("statisticHelp.txt"), "utf-8"));
+            result.append("\n");
+            result.append("\n");
+            result.append(IOUtils.toString(getClass().getResourceAsStream("howOldHelp.txt"), "utf-8"));
         } catch (IOException e) {
             logger.error("Get Help error", e);
         }
